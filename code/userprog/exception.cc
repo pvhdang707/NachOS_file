@@ -606,6 +606,59 @@ void ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 			break;
 		}
+
+		//system call remove
+		case SC_Remove:
+		{
+			DEBUG(dbgSys, "System call: Remove.\n");
+
+			//lay dia chi ten file
+			int virtAddr = kernel->machine->ReadRegister(4);
+
+			char *filename;
+			filename = NULL;
+			const int MAX_STRING = 255;
+			//gan ten file cho filename
+			filename = User2System(virtAddr, MAX_STRING); 
+
+			//doc filename that bai
+			if (filename == NULL||strlen(filename) == 0) 
+			{
+				// Bao loi
+				DEBUG(dbgSys, "Remove that bai!!!\n");
+				kernel->machine->WriteRegister(2, -1);
+			}
+			
+			// Kiem tra co dang mo file
+			OpenFile* test = kernel->fileSystem->Open(filename);
+			if (test == NULL)
+			{
+				// Bao loi
+				DEBUG(dbgSys, "Remove that bai!!!\n");
+				kernel->machine->WriteRegister(2, -1);
+			}
+
+			free(test);
+
+			// Xoa file 
+			if (kernel->fileSystem->Remove(filename) == FALSE) // Remove faile failed!
+			{
+				// Bao loi
+				DEBUG(dbgSys, "Remove Failed!\n");
+				kernel->machine->WriteRegister(2, -1);
+			}
+
+			kernel->machine->WriteRegister(2, 0);
+			free(filename);
+			DEBUG(dbgSys, "Remove thanh cong!\n");
+
+			IncreasePC();
+			return;
+			ASSERTNOTREACHED();
+			break;
+		}
+
+		
 		default:
 			cerr << "Unexpected system call " << type << "\n";
 			break;
