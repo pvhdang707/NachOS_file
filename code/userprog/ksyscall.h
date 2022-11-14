@@ -30,11 +30,6 @@ int SysAdd(int op1, int op2)
   return op1 + op2;
 }
 
-int SysRandomNum()
-{
-  srand(time(NULL));
-  return rand();
-}
 
 void SysReadString(char *buffer,int length)
 {
@@ -42,7 +37,6 @@ void SysReadString(char *buffer,int length)
   int i=0;
   do
   {
-    
     ch = (char)kernel->synchConsoleIn->GetChar();
     if (ch!= '\n')
         buffer[i++] = ch;

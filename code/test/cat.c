@@ -5,7 +5,7 @@ int main()
     char c, filename[255];
 
     // Read filename
-    PrintString("   nhan ten file: ");
+    PrintString("nhap ten file: ");
     ReadString(filename, 255);
     PrintString("\n");
 

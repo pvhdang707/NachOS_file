@@ -36,7 +36,7 @@
 #define SC_ThreadJoin   15
 
 #define SC_Add		    42
-#define SC_RandomNum    43
+//#define SC_RandomNum    43
 #define SC_ReadString   44
 #define SC_PrintString  45
 #define SC_ReadNum      46
@@ -200,7 +200,7 @@ void ThreadExit(int ExitCode);
 /*
  * Generates a random integer and returns it.
  */
-int RandomNum();
+//int RandomNum();
 
 /*
  * Read a string of given length from console and save it to user space buffer.

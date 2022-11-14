@@ -174,18 +174,6 @@ void ExceptionHandler(ExceptionType which)
 			break;
 		}
 		//-----------------------------------------------
-		case SC_RandomNum:
-		{
-			DEBUG(dbgSys, "System call RandomNum invoked!");
-			int generatedRandomNum;
-			generatedRandomNum = SysRandomNum();
-			DEBUG(dbgSys, "RandomNum returning with " << generatedRandomNum << "\n");
-			kernel->machine->WriteRegister(2, (int)generatedRandomNum);
-			IncreasePC();
-			return;
-			ASSERTNOTREACHED();
-			break;
-		}
 		//-----------------------------------------------
 		case SC_ReadString:
 		{
@@ -442,7 +430,7 @@ void ExceptionHandler(ExceptionType which)
 			if (id < 0 || id >= MAX_FILES || kernel->fileSystem->openFile[id] == NULL)
 			{
 				//thong bao loi
-				DEBUG(dbgSys, "Read that bai!!!\n");
+				DEBUG(dbgSys, "Read File: that bai!!!\n");
 				//
 				kernel->machine->WriteRegister(2, -1);
 
@@ -450,7 +438,7 @@ void ExceptionHandler(ExceptionType which)
 			//Console Out -> k doc
 			if (id == 1)
 			{
-				DEBUG(dbgSys, "Cannot read Console Out!\n");
+				DEBUG(dbgSys, "Read File: that bai!!!\n");
 				kernel->machine->WriteRegister(2, -1);
 			}
 
@@ -477,7 +465,7 @@ void ExceptionHandler(ExceptionType which)
 
 				kernel->machine->WriteRegister(2, index);
 
-				DEBUG(dbgSys, "Read String thanh cong!\n");
+				DEBUG(dbgSys, "Read File: thanh cong!!!\n");
 			}
 			
 			// doc file 
@@ -496,7 +484,7 @@ void ExceptionHandler(ExceptionType which)
 
 			kernel->machine->WriteRegister(2, NewPos - OldPos);
 
-			DEBUG(dbgSys, "Read File thanh cong!\n");
+			DEBUG(dbgSys, "Read File: thanh cong!!!\n");
 
 			IncreasePC();
 			return;
@@ -516,7 +504,7 @@ void ExceptionHandler(ExceptionType which)
 			//kiem tra hop le
 			if (id < 0 || id >= MAX_FILES || kernel->fileSystem->openFile[id] == NULL)
 			{
-				DEBUG(dbgSys, "Write that bai!\n");
+				DEBUG(dbgSys, "Write File: that bai!!!\n");
 				kernel->machine->WriteRegister(2, -1);
 			}
 
@@ -539,7 +527,7 @@ void ExceptionHandler(ExceptionType which)
 
 				//giai phong bo nho
 				free(buffer);
-				DEBUG(dbgSys, "Write thanh cong!\n");
+				DEBUG(dbgSys, "Write File: thanh cong!!!\n");
 			}
 
 			// ghi file thong thuong
@@ -555,7 +543,7 @@ void ExceptionHandler(ExceptionType which)
 			kernel->machine->WriteRegister(2, NewPos - OldPos);
 			//giai phong bo nho
 			free(buffer);
-			DEBUG(dbgSys, "Write thanh cong!\n");
+			DEBUG(dbgSys, "Write File: thanh cong!!!\n");
 
 			IncreasePC();
 			return;
@@ -575,21 +563,21 @@ void ExceptionHandler(ExceptionType which)
 			//kiem tra hop le
 			if (id < 0 || id >= MAX_FILES || kernel->fileSystem->openFile[id] == NULL)
 			{
-				DEBUG(dbgSys, "Seek that bai!\n");
+				DEBUG(dbgSys, "Seek: that bai!!!\n");
 				kernel->machine->WriteRegister(2, -1);
 			}
 
 			//Console In, Out -> k seek
 			if (id == 0 || id == 1)
 			{	
-				DEBUG(dbgSys, "khong the seek Console!\n");
+				DEBUG(dbgSys, "Seek File: that bai, khong the seek Console!\n");
 				kernel->machine->WriteRegister(2, -1);
 			}
 
 			// seek file thong thuong
 			if (position < 0 || position > kernel->fileSystem->openFile[id]->Length())
 			{
-				DEBUG(dbgSys, "vi tri khong hop le!\n");
+				DEBUG(dbgSys, "Seek File: that bai, vi tri khong hop le!\n");
 				kernel->machine->WriteRegister(2, -1);
 			}
 			//-1: seek toi cuoi file
@@ -599,7 +587,7 @@ void ExceptionHandler(ExceptionType which)
 			
 			kernel->fileSystem->openFile[id]->Seek(position);
 			kernel->machine->WriteRegister(2, position);
-			DEBUG(dbgSys, "Seek thanh cong!\n");
+			DEBUG(dbgSys, "Seek File: thanh cong!\n");
 
 			IncreasePC();
 			return;
@@ -625,7 +613,7 @@ void ExceptionHandler(ExceptionType which)
 			if (filename == NULL||strlen(filename) == 0) 
 			{
 				// Bao loi
-				DEBUG(dbgSys, "Remove that bai!!!\n");
+				DEBUG(dbgSys, "Remove File: that bai!!!\n");
 				kernel->machine->WriteRegister(2, -1);
 			}
 			
@@ -634,7 +622,7 @@ void ExceptionHandler(ExceptionType which)
 			if (test == NULL)
 			{
 				// Bao loi
-				DEBUG(dbgSys, "Remove that bai!!!\n");
+				DEBUG(dbgSys, "Remove File: that bai!!!\n");
 				kernel->machine->WriteRegister(2, -1);
 			}
 
@@ -644,13 +632,13 @@ void ExceptionHandler(ExceptionType which)
 			if (kernel->fileSystem->Remove(filename) == FALSE) // Remove faile failed!
 			{
 				// Bao loi
-				DEBUG(dbgSys, "Remove Failed!\n");
+				DEBUG(dbgSys, "Remove File: that bai !!!\n");
 				kernel->machine->WriteRegister(2, -1);
 			}
 
 			kernel->machine->WriteRegister(2, 0);
 			free(filename);
-			DEBUG(dbgSys, "Remove thanh cong!\n");
+			DEBUG(dbgSys, "Remove File: thanh cong!!!\n");
 
 			IncreasePC();
 			return;
